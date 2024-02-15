@@ -24,13 +24,15 @@ class SmileExtractor():
         self.__remove_whitespaces()
         self.__get_required_cols()
 
-    def mean_activation_per_window(self, num_seconds=2):
+    def mean_activation_per_window(self, num_seconds=2, step_size=30):
         """
         Parameters:
             - data: DataFrame
                 the required columns, like AU activations and frames, needed for further processing
             - num_seconds: int
                 number of seconds required to "hold" the emotion
+            - step_size: int
+                amount of frames to slide within a window to 
         """
 
         # cleanup dataset and extract columns of interest
@@ -43,10 +45,12 @@ class SmileExtractor():
 
         num_exceeded = 0
         while current_frame < end_frame:
+            if num_exceeded >= num_seconds:
+                break
             remaining_frames = end_frame - current_frame
-            # drop the last frames as they cannot be taken into account as a "whole" second
+            ## drop the last frames as they cannot be taken into account as a "whole" second
             if remaining_frames < WINDOW_SIZE:
-                logging.info(f"We will drop the remaining {remaining_frames} frames.")
+                logging.info(f"#frames = {remaining_frames} is smaller than one second (={WINDOW_SIZE}). The remaining frame amount will be dropped.")
                 break
             window_start = current_frame
             # Ensure not to exceed end_frame
@@ -54,7 +58,7 @@ class SmileExtractor():
             window_data = self.df[(self.df['frame'] >= window_start) & (self.df['frame'] < window_end)]
             mean_AU_value_list = list(window_data[["AU06_c", "AU12_c", "AU25_c"]].mean())
             print(window_data["frame"].iloc[0], window_data["frame"].iloc[-1], len(window_data))
-            logging.info(f"Frame(s) {window_data['frame'].iloc[0]} to {window_data['frame'].iloc[-1]} | Mean values of AUs (6,12,25): {mean_AU_value_list} ")
+            logging.info(f"Frame(s) {window_data['frame'].iloc[0]} to {window_data['frame'].iloc[-1]} | Mean values of AU activations [AU06, AU12, AU25]: {[round(num, 2) for num in mean_AU_value_list]} ")
 
             if self.__check_exceed_threshold(mean_AU_value_list):
                 num_exceeded += 1
@@ -64,10 +68,12 @@ class SmileExtractor():
                 num_exceeded = 0
                 logging.info("No smile detected")
 
-            current_frame += WINDOW_SIZE
+            current_frame += step_size
 
 
         if num_exceeded >= num_seconds:
-            logging.info("Smile was held long enough. ByteBuddy will be reloaded now.")
+            logging.info("Smile was held long enough. B will be reloaded now.")
+        elif (num_exceeded < num_seconds) and (num_exceeded > 0):
+            logging.info("Smile was held too short to reload B completely. It has to be done again.")
         else:
-            logging.info("Smile task was not executed like required. Display details in the UI.")
+            logging.info("Smile task was not executed as required. Display details in the UI.")

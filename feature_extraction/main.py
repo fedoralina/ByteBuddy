@@ -14,7 +14,12 @@ if __name__ == '__main__':
     # for happy face
     smile_extractor = SmileExtractor("./face/AU_data/happy_fed.csv")
     smile_extractor.mean_activation_per_window()
-
+    
     # for neutral face
-    smile_extractor = SmileExtractor("./face/AU_data/neutral_fed.csv.csv")
-    smile_extractor.mean_activation_per_window()
+    #smile_extractor = SmileExtractor("./face/AU_data/neutral_fed.csv")
+    #smile_extractor.mean_activation_per_window()
+
+    # smile was held too shortly
+    #smile_extractor = SmileExtractor("./face/AU_data/happy_fed_short_smile.csv")
+    #smile_extractor.mean_activation_per_window(step_size=15)
+
