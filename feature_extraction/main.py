@@ -1,5 +1,6 @@
 from face.AUExtractor import AUSmileExtractor
 from face.AngleSmileExtractor import AngleSmileExtractor
+from gesture.DirectionRecognizer import DirectionRecognizer
 import logging
 
 
@@ -29,9 +30,14 @@ if __name__ == '__main__':
     logging.info("-------------Angle Face Feature Extraction-------------")
     # for happy face
     #angle_smile_extractor = AngleSmileExtractor("./face/AU_data/happy_fed.csv")
-    angle_smile_extractor = AngleSmileExtractor("./face/AU_data/happy_c.csv")
-    angle_smile_extractor.mean_activation_per_window()
+    #angle_smile_extractor = AngleSmileExtractor("./face/AU_data/happy_c.csv")
+    #angle_smile_extractor.mean_activation_per_window()
 
     # for neutral face
     #angle_smile_extractor = AngleSmileExtractor("./face/AU_data/neutral_c.csv")
     #angle_smile_extractor.mean_activation_per_window()
+
+    logging.info("-------------Gesture Feature Extraction-------------")
+    direction_recognizer = DirectionRecognizer()
+    direction_recognizer.read_templates()
+    direction_recognizer.draw_GUI()

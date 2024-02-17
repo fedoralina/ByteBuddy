@@ -1,6 +1,6 @@
 import math
 
-from qdollar.Point import Point
+from gesture.qdollar.Point import Point
 
 
 class Gesture:

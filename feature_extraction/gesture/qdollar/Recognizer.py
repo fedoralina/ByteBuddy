@@ -1,6 +1,6 @@
 import math
 
-from qdollar.Gesture import Gesture
+from gesture.qdollar.Gesture import Gesture
 
 
 class Recognizer:
