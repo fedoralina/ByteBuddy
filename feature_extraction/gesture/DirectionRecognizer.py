@@ -76,9 +76,6 @@ canvas_width = 200
 canvas_height = 100
 strokeId = 0
 
-
-
-
 root = Tk()
 root.title( "Direction Recognizer" )
 root.geometry("800x500")
@@ -96,7 +93,7 @@ label.pack(side=BOTTOM )
 canvas = Canvas(root, 
            width=canvas_width, 
            height=canvas_height,
-           bg="grey")
+           bg="#546c75")
 canvas.pack(expand = NO, side=BOTTOM)
 canvas.bind("<B1-Motion>", draw )
 canvas.bind("<Button-3>", right_click)
@@ -109,6 +106,6 @@ if create_template_mode:
    btn_add.pack(side = BOTTOM)
 
    input_template = Entry(root, font= font_style)
-   input_template.pack()
+   input_template.pack(side=BOTTOM)
     
 root.mainloop()
