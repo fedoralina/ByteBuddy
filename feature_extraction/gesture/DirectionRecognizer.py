@@ -1,13 +1,14 @@
 import os
 
 from tkinter import *
+import tkinter.font as font
 from qdollar.Gesture import Gesture
 from qdollar.Point import Point
 from qdollar.Recognizer import Recognizer
 
 points = []
 templates = []
-create_template_mode = True
+create_template_mode = False
 template_name = "NAME"
 
 def draw(event):
@@ -22,15 +23,17 @@ def right_click(event):
    canvas.delete('all')
    gesture = Gesture("", points)
    res = Recognizer().classify(gesture, templates)
-   direction = res[0].name[0]
-   if direction == 'u':
+   template_name = res[0].name.split('.')[0]
+   if template_name == 'u':
       print("MOVE UP")
-   elif direction == 'd':
+   elif template_name == 'd':
       print("MOVE DOWN")
-   elif direction == 'l':
+   elif template_name == 'l':
       print("MOVE LEFT")
-   elif direction == 'r':
-      print("MOVE RIGHT")     
+   elif template_name == 'r':
+      print("MOVE RIGHT")   
+   else:
+      print(f"Q$ recognized: {template_name}")  
    points = []
 
 def increase_strokeId(event):
@@ -44,6 +47,7 @@ def addtemplates():
    input_template.delete(0, END)
 
    if create_template_mode:
+      print("CREATE TEMPLATE CALLED")
       with open('templates/' + template.name + '.txt', 'w') as f:
          for i in range(len(template.Points)):
             point = template.Points[i]
@@ -62,35 +66,49 @@ for filename in os.listdir("templates/"):
    template = Gesture(filename, points)
    templates.append(template)
 
-   
+points = []
 
 ###
 # tkinter GUI
 ###
    
-canvas_width = 300
-canvas_height = 200
+canvas_width = 200
+canvas_height = 100
 strokeId = 0
+
+
 
 
 root = Tk()
 root.title( "Direction Recognizer" )
+root.geometry("800x500")
+root.resizable(width=False, height=False)
+
+bg_color = "#a8d7e9"
+font_style = font.Font(family="Helvetica", size= 12)
+
+root.configure(bg=bg_color)
+
+
+label = Label(root, text = "Tap with 2 fingers to move", font=font_style, bg="lightgrey")
+label.pack(side=BOTTOM )
+
 canvas = Canvas(root, 
            width=canvas_width, 
-           height=canvas_height)
-canvas.pack(expand = YES, fill = BOTH)
+           height=canvas_height,
+           bg="grey")
+canvas.pack(expand = NO, side=BOTTOM)
 canvas.bind("<B1-Motion>", draw )
 canvas.bind("<Button-3>", right_click)
 canvas.bind('<ButtonRelease-1>', increase_strokeId)
 
-label = Label( root, text = "Right Click to identify gesture", font=("Modern", 14) )
-label.pack( side = BOTTOM )
+
 
 if create_template_mode:
-   btn_add = Button(root, text = "Add template", command=addtemplates, font=("Modern", 12))
+   btn_add = Button(root, text = "Add template", command=addtemplates, font=font_style)
    btn_add.pack(side = BOTTOM)
 
-   input_template = Entry(root)
+   input_template = Entry(root, font= font_style)
    input_template.pack()
     
-mainloop()
+root.mainloop()
