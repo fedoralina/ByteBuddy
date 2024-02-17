@@ -1,4 +1,4 @@
-from face.SmileExtractor import SmileExtractor
+from face.AUExtractor import AUSmileExtractor
 import logging
 logging.basicConfig(
     level=logging.INFO,
@@ -12,14 +12,14 @@ if __name__ == '__main__':
     #----extract smile 
     logging.info("-------------Temporal Face Feature Extraction-------------")
     # for happy face
-    smile_extractor = SmileExtractor("./face/AU_data/happy_fed.csv")
-    smile_extractor.mean_activation_per_window()
+    au_smile_extractor = AUSmileExtractor("./face/AU_data/happy_fed.csv")
+    au_smile_extractor.mean_activation_per_window()
     
     # for neutral face
-    #smile_extractor = SmileExtractor("./face/AU_data/neutral_fed.csv")
-    #smile_extractor.mean_activation_per_window()
+    #au_smile_extractor = AUSmileExtractor("./face/AU_data/neutral_fed.csv")
+    #au_smile_extractor.mean_activation_per_window()
 
     # smile was held too shortly
-    #smile_extractor = SmileExtractor("./face/AU_data/happy_fed_short_smile.csv")
-    #smile_extractor.mean_activation_per_window(step_size=15)
+    #au_smile_extractor = AUSmileExtractor("./face/AU_data/happy_fed_short_smile.csv")
+    #au_smile_extractor.mean_activation_per_window(step_size=15)
 
