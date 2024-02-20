@@ -6,7 +6,6 @@ from gesture.qdollar.Gesture import Gesture
 class Recognizer:
     def classify(self, gesture, templates):
         n = 32
-        m = 64
         score = float('inf')
         for template in templates:
             d = self.cloud_match(gesture, template, n, score)
